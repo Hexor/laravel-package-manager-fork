@@ -14,6 +14,7 @@ class RequirePackageCommand extends Command
      */
     protected $signature = 'package:require {package_name}
         {--r | --register-only : skip installing package with composer}
+        {--l | --local-dev : install local development package}
         {--d | --dev : install package in development dependencies}';
 
     /**
@@ -52,6 +53,7 @@ class RequirePackageCommand extends Command
         $options = [
             'register-only' => $this->hasOption('register-only') ? $this->option('register-only') : null,
             'dev' => $this->hasOption('dev') ? $this->option('dev') : null,
+            'local-dev' => $this->hasOption('local-dev') ? $this->option('local-dev') : null,
         ];
 
         $this->requirer->require($this->argument('package'), $options);

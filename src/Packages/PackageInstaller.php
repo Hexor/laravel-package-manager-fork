@@ -11,14 +11,18 @@ class PackageInstaller
      * @param Package $package
      * @return void
      */
-    public function install(Package $package, $InstallAsDev = false)
+    public function install(Package $package, $options = null)
     {
         $cmd = $this->findComposerBinary().' require '.$package->getName();
         if ($package->getVersion()) {
             $cmd .= ':'.$package->getVersion();
         }
-        if ($InstallAsDev) {
-            $cmd .= ' --dev';
+        if (isset($options)) {
+            if ($options['dev']) {
+                $cmd .= ' --dev';
+            } elseif ($options['local-dev']) {
+                $cmd .= ':*@dev';
+            }
         }
 
         $runner = new RunExternalCommand($cmd);

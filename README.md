@@ -8,16 +8,16 @@ It allows you to quickly install a package via composer, if necessary, and then 
 ### Installation
 ---
 
-To install, first install with composer: 
+To install, first install with composer:
 
 	composer require patinthehat/laravel-package-manager
-	
+
 Then, register the service provider by editing `config/app.php` and adding:
 
 	LaravelPackageManager\LaravelPackageManagerServiceProvider::class,
-	
+
 to the `$providers` array.
-	
+
 That's it! You now have access to the package manager commands through `artisan`.
 
 ---
@@ -26,10 +26,11 @@ That's it! You now have access to the package manager commands through `artisan`
 
 To install (via composer) a package and register any service providers or Facades it provides, use the `package:require` command:
 
-	package:require <package-name> [-r|--register-only] [-d|--dev]
-	
+	package:require <package-name> [-r|--register-only] [-d|--dev] [-l|--local-dev]
+
 The `--register-only` option skips the composer installation step.
 		The `--dev` option allows you to install the package in your development dependencies.
+		The `--local-dev` option allows you to install local development package.
 
 To unregister service providers and facades associated with a package, use the `package:unregister` command:
 
