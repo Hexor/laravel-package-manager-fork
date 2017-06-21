@@ -3,6 +3,8 @@
 namespace LaravelPackageManager\Console\Commands;
 
 use Illuminate\Console\Command;
+use LaravelPackageManager\Support\Output;
+use LaravelPackageManager\Support\UserPrompt;
 use LaravelPackageManager\Packages\PackageRequirer;
 
 class RequirePackageCommand extends Command
@@ -12,9 +14,10 @@ class RequirePackageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'package:require {package_name}
-        {--r | --register-only : skip installing package with composer}
-        {--d | --dev : install package in development dependencies}';
+    protected $signature = 'package:require {package_name} '.
+                            '{--r | --register-only : skip installing package with composer} '.
+                            '{--l | --local-dev : install local development package}'.
+                            '{--d | --dev : install package in development dependencies}';
 
     /**
      * The console command description.
@@ -24,13 +27,6 @@ class RequirePackageCommand extends Command
     protected $description = 'Install a package and automatically register its service providers and facades.';
 
     /**
-     * The package requirer.
-     *
-     * @var \LaravelPackageManager\Packages\PackageRequirer
-     */
-    protected $requirer;
-
-    /**
      * Create a new command instance.
      *
      * @return void
@@ -38,8 +34,6 @@ class RequirePackageCommand extends Command
     public function __construct()
     {
         parent::__construct();
-
-        $this->requirer = new PackageRequirer($this);
     }
 
     /**
@@ -50,10 +44,12 @@ class RequirePackageCommand extends Command
     public function handle()
     {
         $options = [
-            'register-only' => $this->hasOption('register-only') ? $this->option('register-only') : null,
-            'dev' => $this->hasOption('dev') ? $this->option('dev') : null,
+            'register-only'=>($this->hasOption('register-only')?$this->option('register-only'):null),
+            'dev' => ($this->hasOption('dev')?$this->option('dev'):null),
+            'local-dev' => $this->hasOption('local-dev') ? $this->option('local-dev') : null,
         ];
 
-        $this->requirer->require($this->argument('package'), $options);
+        $requirer = new PackageRequirer($this);
+        $requirer->require($this->argument('package_name'), $options);
     }
 }
